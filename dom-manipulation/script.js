@@ -1,12 +1,11 @@
 let quoteDisplay = document.getElementById("quoteDisplay");
 const showQuoteButton = document.getElementById("newQuote");
-let quoteArr = [
-    createQuoteOBJ("The only way to do great work is to love what you do.", "Inspiration"),
-    createQuoteOBJ("Life is what happens when you're busy making other plans.", "Life"),
-    createQuoteOBJ("I have not failed. I've just found 10,000 ways that won't work.", "Motivation"),
-    createQuoteOBJ("To be yourself in a world that is constantly trying to make you something else is the greatest accomplishment.", "Philosophy"),
-    createQuoteOBJ("If you want to go fast, go alone. If you want to go far, go together.", "Wisdom")
-]
+let quoteArr = [];
+// createQuoteOBJ("The only way to do great work is to love what you do.", "Inspiration"),
+// createQuoteOBJ("Life is what happens when you're busy making other plans.", "Life"),
+// createQuoteOBJ("I have not failed. I've just found 10,000 ways that won't work.", "Motivation"),
+// createQuoteOBJ("To be yourself in a world that is constantly trying to make you something else is the greatest accomplishment.", "Philosophy"),
+// createQuoteOBJ("If you want to go fast, go alone. If you want to go far, go together.", "Wisdom")
 
 
 
@@ -32,8 +31,7 @@ function showRandomQuote()
     qElement.innerHTML = quoteArr[randomNumber].text;
     qElement.setAttribute("cite", quoteArr[randomNumber].category);
     quoteDiv.appendChild(qElement);
-
-
+    sessionStorage.setItem("lastViewedQuote", quoteArr[randomNumber].text);
 }
 function createAddQuoteForm()
 {
@@ -42,6 +40,9 @@ function createAddQuoteForm()
     if (text.value !== "" && category.value !== "")
     {
         quoteArr.push(createQuoteOBJ(text.value, category.value));
+        if(localStorage.getItem("Quote") !== null)
+            localStorage.removeItem("Quote");
+        localStorage.setItem("Quote", JSON.stringify(quoteArr));
         text.value = "";
         category.value = "";
     }   
@@ -51,3 +52,16 @@ function addQuote()
    createAddQuoteForm();
 }
 
+function loadQuote()
+{
+    const storageQuote = localStorage.getItem("Quote");
+    JSON.parse(storageQuote).forEach(element => {
+        quoteArr.push(createQuoteOBJ(element.text, element.category));
+    });
+}
+document.addEventListener("DOMContentLoaded", ()=>
+{
+    console.log(localStorage.getItem("Quote"));
+    if (localStorage.getItem("Quote") !== null)
+        loadQuote();
+})
