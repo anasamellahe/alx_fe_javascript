@@ -25,7 +25,7 @@ function showRandomQuote()
 {
     const quoteDiv = document.getElementById("quoteDisplay");
     const randomNumber = Math.floor(Math.random() * (quoteArr.length - 0));
-    quoteDiv.innerText = quoteArr[randomNumber].text;
+    quoteDiv.innerHTML = quoteArr[randomNumber].text;
 
 }
 
