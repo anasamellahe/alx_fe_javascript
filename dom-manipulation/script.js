@@ -23,16 +23,22 @@ function createQuoteOBJ(text, category)
 
 function showRandomQuote()
 {
+    
     const quoteDiv = document.getElementById("quoteDisplay");
+    if (quoteDiv.hasChildNodes() === true)
+        quoteDiv.childNodes[0].remove()
     const randomNumber = Math.floor(Math.random() * (quoteArr.length - 0));
-    quoteDiv.innerHTML = quoteArr[randomNumber].text;
+    const qElement = document.createElement("q");
+    qElement.innerHTML = quoteArr[randomNumber].text;
+    qElement.setAttribute("cite", quoteArr[randomNumber].category);
+    quoteDiv.appendChild(qElement);
+
 
 }
 function createAddQuoteForm()
 {
-     const text = document.getElementById("newQuoteText");
+    const text = document.getElementById("newQuoteText");
     const category = document.getElementById("newQuoteCategory");
-
     if (text.value !== "" && category.value !== "")
     {
         quoteArr.push(createQuoteOBJ(text.value, category.value));
