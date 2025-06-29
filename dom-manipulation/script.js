@@ -40,13 +40,19 @@ function createAddQuoteForm()
     if (text.value !== "" && category.value !== "")
     {
         quoteArr.push(createQuoteOBJ(text.value, category.value));
-        if(localStorage.getItem("Quote") !== null)
-            localStorage.removeItem("Quote");
-        localStorage.setItem("Quote", JSON.stringify(quoteArr));
+        saveQuotes();
         text.value = "";
         category.value = "";
     }   
 }
+
+function saveQuotes()
+{
+    if(localStorage.getItem("Quote") !== null)
+            localStorage.removeItem("Quote");
+    localStorage.setItem("Quote", JSON.stringify(quoteArr));
+}
+
 function addQuote()
 {
    createAddQuoteForm();
@@ -58,6 +64,17 @@ function loadQuote()
     JSON.parse(storageQuote).forEach(element => {
         quoteArr.push(createQuoteOBJ(element.text, element.category));
     });
+}
+
+ function importFromJsonFile(event) {
+    const fileReader = new Blob();
+    fileReader.onload = function(event) {
+      const importedQuotes = JSON.parse(event.target.result);
+      quoteArr.push(...importedQuotes);
+      saveQuotes();
+      alert('Quotes imported successfully!');
+    };
+    fileReader.readAsText(event.target.files[0]);
 }
 document.addEventListener("DOMContentLoaded", ()=>
 {
