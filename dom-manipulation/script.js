@@ -28,10 +28,9 @@ function showRandomQuote()
     quoteDiv.innerHTML = quoteArr[randomNumber].text;
 
 }
-
-function addQuote()
+function createAddQuoteForm()
 {
-    const text = document.getElementById("newQuoteText");
+     const text = document.getElementById("newQuoteText");
     const category = document.getElementById("newQuoteCategory");
 
     if (text.value !== "" && category.value !== "")
@@ -40,5 +39,9 @@ function addQuote()
         text.value = "";
         category.value = "";
     }   
+}
+function addQuote()
+{
+   createAddQuoteForm();
 }
 
