@@ -24,6 +24,8 @@ function showRandomQuote()
 {
     
     const quoteDiv = document.getElementById("quoteDisplay");
+    if (quoteArr.length === 0 )
+        return ;
     if (quoteDiv.hasChildNodes() === true)
         quoteDiv.childNodes[0].remove()
     const randomNumber = Math.floor(Math.random() * (quoteArr.length - 0));
@@ -67,18 +69,31 @@ function loadQuote()
 }
 
  function importFromJsonFile(event) {
-    const fileReader = new Blob();
+    
+    const fileReader = new FileReader();
     fileReader.onload = function(event) {
       const importedQuotes = JSON.parse(event.target.result);
       quoteArr.push(...importedQuotes);
       saveQuotes();
-      alert('Quotes imported successfully!');
     };
     fileReader.readAsText(event.target.files[0]);
 }
+
+function  exportQuotes()
+{
+    if (quoteArr.length === 0)
+        return;
+    const a = document.createElement("a");
+    const blob = new Blob([JSON.stringify(quoteArr)], {type: "application/json"});
+    const url = URL.createObjectURL(blob);
+    a.setAttribute("href", url);
+    a.setAttribute("download", "quotes.json");
+    a.click();
+    URL.revokeObjectURL(url);
+}
+
 document.addEventListener("DOMContentLoaded", ()=>
 {
-    console.log(localStorage.getItem("Quote"));
     if (localStorage.getItem("Quote") !== null)
         loadQuote();
 })
