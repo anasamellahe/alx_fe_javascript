@@ -24,6 +24,7 @@ function displayQuote(text, category)
 
 function showRandomQuote()
 {
+    // innerHTML
     const selectedCategory = categoryFilter.value;
     if (map.has(selectedCategory) === false)
         return;
