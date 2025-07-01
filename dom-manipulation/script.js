@@ -15,7 +15,7 @@ function displayQuote(text, category)
     if (quoteDiv.hasChildNodes() === true)
         quoteDiv.childNodes[0].remove();
     const qElement = document.createElement("q");
-    qElement.innerHTML = text;
+    qElement.textContent = text;
     qElement.setAttribute("cite", category);
     quoteDiv.appendChild(qElement);
     sessionStorage.setItem("lastViewedQuote", JSON.stringify({"text":text, "category":category}));
