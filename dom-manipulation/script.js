@@ -8,31 +8,33 @@ let quoteArr = [];
 showQuoteButton.addEventListener("click", () => showRandomQuote())
 //quote creation ---
 
+
+function displayQuote(text, category)
+{
+    const quoteDiv = document.getElementById("quoteDisplay");
+    if (quoteDiv.hasChildNodes() === true)
+        quoteDiv.childNodes[0].remove();
+    const qElement = document.createElement("q");
+    qElement.innerHTML = text;
+    qElement.setAttribute("cite", category);
+    quoteDiv.appendChild(qElement);
+    sessionStorage.setItem("lastViewedQuote", JSON.stringify({"text":text, "category":category}));
+}
+
+
 function showRandomQuote()
 {
-    let usingFilter = false;
-    const LastSelectedCategory = localStorage.getItem("LastSelectedCategory");
-
-    if (quoteArr.length === 0)
-        return ;
-
-    if (LastSelectedCategory != null)
-        usingFilter = true;
-
-    const quoteDiv = document.getElementById("quoteDisplay");    
- 
-    if (quoteDiv.hasChildNodes() === true)
-        quoteDiv.childNodes[0].remove()
-    let randomNumber = Math.floor(Math.random() * (quoteArr.length - 0));
-
-    while (usingFilter == true && quoteArr[randomNumber].category !== LastSelectedCategory)
-        randomNumber = Math.floor(Math.random() * (quoteArr.length - 0));
-
-    const qElement = document.createElement("q");
-    qElement.innerHTML = quoteArr[randomNumber].text;
-    qElement.setAttribute("cite", quoteArr[randomNumber].category);
-    quoteDiv.appendChild(qElement);
-    sessionStorage.setItem("lastViewedQuote", quoteArr[randomNumber].text);
+    const selectedCategory = categoryFilter.value;
+    if (map.has(selectedCategory) === false)
+        return;
+    const arr = map.get(selectedCategory);
+    if (arr.length === 0)
+        return;
+    let randomNumber = Math.floor(Math.random() * (arr.length - 0));
+    if (selectedCategory === "all")
+        displayQuote(arr[randomNumber].text, selectedCategory);
+    else
+        displayQuote(arr[randomNumber], selectedCategory);
 }
 
 function createAddQuoteForm()
@@ -130,15 +132,17 @@ function  exportQuotes()
 //category filter ---
 function populateCategories(quotes)
 {
-    quotes.forEach((element , index) => {
-        if (quotes.findIndex((e) => e.category == element.category)  == index)
+    
+    quotes.forEach((element) => {
+        if (map.has(element.category) === false)
         {
             createNewCategory(element.category);
             map.set(element.category, []);
         }
         map.get(element.category).push(element.text);
     });
-    console.log("map == ", map);
+    if(map.has("all") === false)
+        map.set("all", quoteArr);
 }
 
 function filterQuotes()
@@ -149,9 +153,9 @@ function filterQuotes()
 document.addEventListener("DOMContentLoaded", ()=>
 {
     if (localStorage.getItem("Quote") !== null)
-    {
         loadQuote();
-        populateCategories(quoteArr);
-    }
-
+    populateCategories(quoteArr);
+    const LastSelectedCategory = localStorage.getItem("LastSelectedCategory");
+    if (LastSelectedCategory !== null)
+        categoryFilter.value = LastSelectedCategory;
 })
