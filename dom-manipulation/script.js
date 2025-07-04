@@ -183,6 +183,26 @@ function filterQuotes()
 //category filter ---
 
 
+// This function is just a simulation of posting data to the server
+async function postData() {
+    try {
+        const response = await fetch("https://jsonplaceholder.typicode.com/posts", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(quoteArr)
+        });
+
+        if (response.ok) {
+            console.log("Success:", await response.json());
+        } else {
+            console.log("Failed to post data. Status:", response.status);
+        }
+    } catch (error) {
+        console.log("Error:", error);
+    }
+}
 
 async function fetchQuotesFromServer()
 {
