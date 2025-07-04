@@ -1,9 +1,9 @@
 let quoteDisplay = document.getElementById("quoteDisplay");
 const showQuoteButton = document.getElementById("newQuote");
 const categoryFilter = document.getElementById("categoryFilter");
+const updateDataUi = document.getElementById("UpdateDataUi");
 let map = new Map();
 let quoteArr = [];
-
 
 showQuoteButton.addEventListener("click", () => showRandomQuote())
 //quote creation ---
@@ -101,6 +101,34 @@ function createNewCategory(category)
     categoryFilter.appendChild(option);
 }
 
+function isDuplicatedQuotes(quoteToCheck)
+{
+    if (quoteArr.find((quoteElement) => quoteElement.category == quoteToCheck.category && quoteElement.text == quoteToCheck.text) == undefined)
+        return false;
+    return true;
+}
+
+
+function pushNewQuotes(data)
+{
+    let isUpdated = false;
+
+
+    data.forEach((DataElement) =>
+    {
+        if(isDuplicatedQuotes(DataElement) == false)
+        {
+            isUpdated = true;
+            quoteArr.push(DataElement);
+            addSingleCategory(DataElement.category, DataElement.text);
+        }
+    });
+    if(isUpdated == true)
+        alert("")
+        saveQuotes();
+}
+
+
 //Utils ---
 
 // export and import quotes ---
@@ -133,6 +161,7 @@ function  exportQuotes()
 //category filter ---
 function populateCategories(quotes)
 {
+    console.log("array in populate category :" , quotes);
     
     quotes.forEach((element) => {
         if (map.has(element.category) === false)
@@ -150,7 +179,29 @@ function filterQuotes()
 {
     localStorage.setItem("LastSelectedCategory", categoryFilter.value);
 }
+
 //category filter ---
+
+
+
+async function fetchQuotes()
+{
+    try
+    {
+
+        const fetchedQuotes = await fetch("https://my-json-server.typicode.com/anasamellahe/MyJSONServer/quote");
+        if (fetchedQuotes.ok)
+        {
+            const data = await fetchedQuotes.json();
+            pushNewQuotes(data);
+        }
+    }
+    catch(error)
+    {
+        console.error("Error fetching data from server:", error);
+    }
+}
+
 document.addEventListener("DOMContentLoaded", ()=>
 {
     if (localStorage.getItem("Quote") !== null)
@@ -159,4 +210,6 @@ document.addEventListener("DOMContentLoaded", ()=>
     const LastSelectedCategory = localStorage.getItem("LastSelectedCategory");
     if (LastSelectedCategory !== null)
         categoryFilter.value = LastSelectedCategory;
+    const intervalId = setInterval(fetchQuotes, 60000);
 })
+
