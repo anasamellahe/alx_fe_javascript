@@ -188,7 +188,7 @@ async function fetchQuotesFromServer()
 {
     try
     {
-
+        //https://jsonplaceholder.typicode.com/posts
         const fetchedQuotes = await fetch("https://my-json-server.typicode.com/anasamellahe/MyJSONServer/quote");
         if (fetchedQuotes.ok)
         {
