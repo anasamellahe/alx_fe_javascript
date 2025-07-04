@@ -124,8 +124,8 @@ function syncQuotes(data)
         }
     });
     if(isUpdated == true)
-        alert("")
-        saveQuotes();
+        alert("Quotes synced with server!");
+    saveQuotes();
 }
 
 
@@ -224,12 +224,14 @@ async function fetchQuotesFromServer()
 
 document.addEventListener("DOMContentLoaded", ()=>
 {
+    
     if (localStorage.getItem("Quote") !== null)
         loadQuote();
+    const intervalId = setInterval(fetchQuotesFromServer, 60000);
     populateCategories(quoteArr);
     const LastSelectedCategory = localStorage.getItem("LastSelectedCategory");
     if (LastSelectedCategory !== null)
         categoryFilter.value = LastSelectedCategory;
-    const intervalId = setInterval(fetchQuotesFromServer, 60000);
+    
 })
 
