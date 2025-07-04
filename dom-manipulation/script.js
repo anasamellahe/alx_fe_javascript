@@ -109,7 +109,7 @@ function isDuplicatedQuotes(quoteToCheck)
 }
 
 
-function pushNewQuotes(data)
+function syncQuotes(data)
 {
     let isUpdated = false;
 
@@ -213,7 +213,7 @@ async function fetchQuotesFromServer()
         if (fetchedQuotes.ok)
         {
             const data = await fetchedQuotes.json();
-            pushNewQuotes(data);
+            syncQuotes(data);
         }
     }
     catch(error)
