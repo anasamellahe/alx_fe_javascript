@@ -184,7 +184,7 @@ function filterQuotes()
 
 
 
-async function fetchQuotes()
+async function fetchQuotesFromServer()
 {
     try
     {
@@ -210,6 +210,6 @@ document.addEventListener("DOMContentLoaded", ()=>
     const LastSelectedCategory = localStorage.getItem("LastSelectedCategory");
     if (LastSelectedCategory !== null)
         categoryFilter.value = LastSelectedCategory;
-    const intervalId = setInterval(fetchQuotes, 60000);
+    const intervalId = setInterval(fetchQuotesFromServer, 60000);
 })
 
